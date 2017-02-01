@@ -1,7 +1,7 @@
 # Data-Structures-Project
 Contains files for data structures final project
 
-#Contributors
+**Contributors**
 
 <ul>
 	<li>Jasindan Rasalingam - 100584595</li>
