@@ -9,22 +9,33 @@ public class Dictionary {
 	Entry[] entries; // Array to store the entries
 	
 	public Dictionary(int wordCount) throws FileNotFoundException {
-		addFromCSV(wordCount, "dictionary.csv");
+		entries = new Entry[wordCount]; // initialize entries array to number of starting entries
+		for (int i=0; i<wordCount; i++)
+			entries[i] = null; // initialize all entries to be null
+		
+		addFromCSV(wordCount, "dictionary.csv");	
 		// fromCSV("edit", wordCount, "definitions.csv");
 		// fromFile("search", wordCount, "words.txt");
 		// fromFile("delete", wordCount, "words.txt");
 	}
 	
-	public String toString() {
+	public String toString() { // returns a string containing the whole dictionary in CSV format
 		String s = null;
 		for (int i=0; i<entries.length; i++)
 			s += "[" + entries[i].getHash() + "] " +entries[i].getKey() + ", " + entries[i].getValue() + "\n";
 		return s;
 	}
 	
-	public boolean add(String key, String value) {
-		// TODO check if key already exists, if not add new entry
-		return false; // return true if successfully added a new entry
+	public void add(String key, String value) { // checks if key exists, if not adds entry to array
+		int hash = convertHash(key);
+		if (entries[hash] != null)
+			System.out.println("error - key already exists");
+		else
+			entries[hash] = new Entry(key, value, hash); // check for resizing array
+	}
+	
+	public void delete(String key) {
+		// TODO check if key exists, if true then delete entry
 	}
 	
 	public String search(String key) {
@@ -32,9 +43,8 @@ public class Dictionary {
 		return null;
 	}
 	
-	public boolean update(String key, String value) {
+	public void update(String key, String value) {
 		// TODO check if key already exists, if it does change it's value
-		return false;
 	}
 	
 	public void fromFile(String function, int size, String fName) throws FileNotFoundException {
@@ -42,14 +52,10 @@ public class Dictionary {
 	}
 	
 	public void addFromCSV(int wordCount, String fName) throws FileNotFoundException { // check for collisions
-		entries = new Entry[wordCount]; // initialize entries array to number of starting entries
-		for (int i=0; i<wordCount; i++)
-			entries[i] = new Entry("null", "null", -1);
 		Scanner csv = new Scanner(new File("C:/Users/100584423/Desktop/dictionary/dictionary.csv"));
         csv.useDelimiter(",");
         for (int i=0; i<wordCount; i++) {
-        	Entry temp = new Entry(csv.next(), csv.next(), convertHash(csv.next()));
-        	entries[temp.getHash()] = temp;
+        	add(csv.next(), csv.next());
         }
         csv.close();
 	}
@@ -58,10 +64,14 @@ public class Dictionary {
 		// TODO resize entries[] when not enough space to insert new entry
 	}
 	
-	public int convertHash(String s) { // need to check for collisions
+	public int convertHash(String s) {
+		// generate a hash
 		int hash = 7;
 		for (int i=0; i<s.length(); i++)
 			hash = (hash*31 + s.charAt(i)) % entries.length;
+		// check for collisions and resolve them
+		while(entries[hash]!=null)
+			hash = (hash + 1) % entries.length;
 		return hash;
 	}
 }
