@@ -1,0 +1,46 @@
+EXERCISES
+========================================
+
+Exercise 1:
+  - Add 100 words and definitions to your dictionary from dictionary.csv
+  - Edit 100 definitions in your dictionary using definitions.csv    
+  - Search in the dictionary the first 100 words from words.txt
+  - Delete in the dictionary the first 100 words from words.txt
+
+
+Exercise 2:
+  - Add 1000 words and definitions to your dictionary from dictionary.csv
+  - Edit 1000 definitions in your dictionary using definitions.csv
+  - Search in the dictionary the first 1000 words from words.txt
+  - Delete in the dictionary the first 1000 words from words.txt
+
+
+Exercise 3:
+  - Add 2500 words and definitions to your dictionary from dictionary.csv
+  - Edit 2500 definitions in your dictionary using definitions.csv
+  - Search in the dictionary the first 2500 words from words.txt
+  - Delete in the dictionary the first 2500 words from words.txt
+
+
+Exercise 4:
+  - Add 5000 words and definitions to your dictionary from dictionary.csv
+  - Edit 5000 definitions in your dictionary using definitions.csv
+  - Search in the dictionary the first 5000 words from words.txt
+  - Delete in the dictionary the first 5000 words from words.txt
+
+
+Exercise 5:
+  - Add 10000 words and definitions to your dictionary from dictionary.csv
+  - Edit 10000 definitions in your dictionary using definitions.csv
+  - Search in the dictionary the first 10000 words from words.txt
+  - Delete in the dictionary the first 10000 words from words.txt
+
+
+Exercise 6:
+  - Add ALL words and definitions to your dictionary from dictionary.csv
+  - Edit the definitions in your dictionary using ALL of definitions.csv
+  - Search in the dictionary for ALL of the words from words.txt
+  - Delete in the dictionary ALL of the words from words.txt
+
+
+
