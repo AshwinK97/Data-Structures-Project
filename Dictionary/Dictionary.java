@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+import javax.print.DocFlavor.URL;
+
 public class Dictionary {
 	
 	Entry[] entries; // Array to store the entries
@@ -13,7 +15,7 @@ public class Dictionary {
 		for (int i=0; i<wordCount; i++)
 			entries[i] = null; // initialize all entries to be null
 		
-		addFromCSV(wordCount, "dictionary.csv");	
+		fromCSV(wordCount, "dictionary.csv");	
 		// fromCSV("edit", wordCount, "definitions.csv");
 		// fromFile("search", wordCount, "words.txt");
 		// fromFile("delete", wordCount, "words.txt");
@@ -51,13 +53,17 @@ public class Dictionary {
 		// TODO perform specified function using words from file
 	}
 	
-	public void addFromCSV(int wordCount, String fName) throws FileNotFoundException { // check for collisions
-		Scanner csv = new Scanner(new File("C:/Users/100584423/Desktop/dictionary/dictionary.csv"));
-        csv.useDelimiter(",");
-        for (int i=0; i<wordCount; i++) {
-        	add(csv.next(), csv.next());
-        }
-        csv.close();
+	public void fromCSV(int wordCount, String fName) throws FileNotFoundException {
+		System.out.print("Loading " + wordCount + " entries from '" + fName + "' ... ");
+//		ClassLoader classLoader = getClass().getClassLoader();
+//		File file = new File(classLoader.getResource(fName).getFile());
+//		Scanner csv = new Scanner(file);
+		Scanner csv = new Scanner(new File("C:/Users/100584423/Desktop/dictionary/dictionary.csv")); // change this to load from root directory
+        	csv.useDelimiter(",");
+		for (int i=0; i<wordCount; i++)
+			add(csv.next(), csv.next());
+		csv.close();
+		System.out.println("done");
 	}
 	
 	public void resizeEntries(int newSize) {
