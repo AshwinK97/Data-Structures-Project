@@ -1,5 +1,3 @@
-package dictionary;
-
 public class Entry {
 	
 	private String key, value;
