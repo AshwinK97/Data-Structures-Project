@@ -1,5 +1,6 @@
-# Data-Structures-Project
-Contains files for data structures final project
+# Word-Dictionary
+Contains files for word dictionary
+Part of the data structures final project
 
 **Contributors**
 
