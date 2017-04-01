@@ -2,15 +2,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-import javax.print.DocFlavor.URL;
-
 public class Dictionary {
 
 	Entry[] entries; // Array to store the entries
 
 	public Dictionary(int wordCount) throws FileNotFoundException {
-		entries = new Entry[wordCount]; // initialize entries array to number of starting entries
-		for (int i=0; i<wordCount; i++)
+		entries = new Entry[(int)(wordCount + 10*Math.log10(wordCount))]; // initialize entries array to entries + 10*log10(entries)
+		for (int i=0; i<entries.length; i++)
 			entries[i] = null; // initialize all entries to be null
 
 		fromCSV("add", wordCount, "dictionary.csv");
@@ -26,18 +24,24 @@ public class Dictionary {
 	}
 
 	public String toString() { // returns a string containing the whole dictionary in CSV format
-		String s = null;
-		for (int i=0; i<entries.length; i++)
-			s += "[" + entries[i].getHash() + "] " + entries[i].getKey() + ", " + entries[i].getValue() + "\n";
+		String s = "";
+		for (int i=0; i<entries.length; i++) {
+			if (entries[i] == null)
+				s += "null, null \n";
+			else
+				s += entries[i].getKey() + "  <|||>  " + entries[i].getValue();
+		}
 		return s;
 	}
 
 	public void add(String key, String value) { // checks if key exists, if not adds entry to array
 		int hash = convertHash(key);
-		if (entries[hash] != null)
-			System.out.println("error - key already exists");
-		else
+		if (entries[hash]!=null && entries[hash].getValue().equals(key)) {
+			entries[hash].setValue(entries[hash].getValue() + " " + value);
+		}
+		else {
 			entries[hash] = new Entry(key, value, hash); // check for resizing array
+		}
 	}
 
 	public void delete(String key) {
@@ -51,7 +55,7 @@ public class Dictionary {
 		return "key not found";
 	}
 
-	public void update(String key, String value) {
+	public void edit(String key, String value) {
 		// TODO check if key already exists, if it does change it's value
 	}
 
@@ -70,19 +74,21 @@ public class Dictionary {
 	public void fromCSV(String function, int wordCount, String fName) throws FileNotFoundException {
 		if (function.equals("add")) {
 			System.out.print("Adding " + wordCount + " entries from '" + fName + "' ... ");
-			// Scanner csv = new Scanner(new File("c:/Users/studentID/Documents/EclipseProjects/Dictionary/src/dictionary.csv")); // change this to load from root directory
-			Scanner csv = new Scanner(new File("dictionary.csv")); // change this to load from root directory
-			csv.useDelimiter(",");
-			for (int i=0; i<wordCount; i++)
-				add(csv.next(), csv.next());
-			csv.close();
+			Scanner csvIn = new Scanner(new File("C:/Users/100584423/Desktop/dictionary/dictionary.csv"));
+			String[] kv;
+			for (int i=0; i<wordCount; i++) {
+				kv = csvIn.nextLine().split("\",\"");
+				System.out.println(kv[0] + " - " + kv[1]);
+				add(kv[0].replace("\"", ""), kv[1].replace("\"", "")); // remove quotes from strings before adding
+			}
+			csvIn.close();
 		} else if (function.equals("edit")) {
 			System.out.print("Editing " + wordCount + " entries from '" + fName + "' ... ");
 			// TODO edit words
 		} else {
 			System.out.println("invalid fromCSV operation");
 		}
-		System.out.println("done");
+		System.out.println("done\n");
 	}
 
 	public void resizeEntries(int newSize) {
@@ -95,8 +101,11 @@ public class Dictionary {
 		for (int i=0; i<s.length(); i++)
 			hash = (hash*31 + s.charAt(i)) % entries.length;
 		// check for collisions and resolve them
-		while(entries[hash]!=null)
-			hash = (hash + 1) % entries.length;
+		while(entries[hash]!=null) {
+			if (entries[hash].getKey().equals(s)) // if s is same as key, return location of that key
+				break;
+			hash = (hash + 1) % entries.length; // add +1 to hash
+		}
 		return hash;
 	}
 }
