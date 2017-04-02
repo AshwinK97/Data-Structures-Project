@@ -27,16 +27,17 @@ public class Dictionary {
 		String s = "";
 		for (int i=0; i<entries.length; i++) {
 			if (entries[i] == null)
-				s += "null, null \n";
+				s += i + ". " + "null  --  null \n";
 			else
-				s += entries[i].getKey() + "  <|||>  " + entries[i].getValue();
+				s += i + ". " + entries[i].getKey() + "  --  " + entries[i].getValue() + " \n";
 		}
 		return s;
 	}
 
-	public void add(String key, String value) { // checks if key exists, if not adds entry to array
+	public void add(String key, String value) { // if key exists, adds value to that key, if not create new entry
 		int hash = convertHash(key);
-		if (entries[hash]!=null && entries[hash].getValue().equals(key)) {
+		if (entries[hash]!=null && entries[hash].getKey().equals(key)) {
+//			System.out.println(entries[hash].getKey());
 			entries[hash].setValue(entries[hash].getValue() + " " + value);
 		}
 		else {
@@ -74,12 +75,12 @@ public class Dictionary {
 	public void fromCSV(String function, int wordCount, String fName) throws FileNotFoundException {
 		if (function.equals("add")) {
 			System.out.print("Adding " + wordCount + " entries from '" + fName + "' ... ");
-			Scanner csvIn = new Scanner(new File("C:/Users/100584423/Desktop/dictionary/dictionary.csv"));
+			Scanner csvIn = new Scanner(new File("D:/Desktop/dictionary/dictionary.csv"));
 			String[] kv;
 			for (int i=0; i<wordCount; i++) {
 				kv = csvIn.nextLine().split("\",\"");
-				System.out.println(kv[0] + " - " + kv[1]);
-				add(kv[0].replace("\"", ""), kv[1].replace("\"", "")); // remove quotes from strings before adding
+//				System.out.println(kv[0] + " - " + kv[1] + "\n");
+				add(kv[0].replaceAll("\"", ""), kv[1].replaceAll("\"", "")); // remove quotes from strings before adding
 			}
 			csvIn.close();
 		} else if (function.equals("edit")) {
