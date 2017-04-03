@@ -25,7 +25,7 @@ public class Dictionary {
 	}
 
 	public String toString() { // returns a string containing the whole dictionary
-		String s = "";
+		String s = "\n# of words: " + words + "\n---------------------";
 		for (int i=0; i<entries.length; i++) {
 			if (entries[i] == null)
 				s += "\n" + i + ". " + "null";
@@ -50,21 +50,23 @@ public class Dictionary {
 
 	public void delete(String key) {
 		int hash = convertHash(key);
-		if (entries[hash]!=null) // if key exists, make that entry null
+		if (entries[hash]!=null && entries[hash].getKey().equals(key)) { // if key exists, make that entry null
 			entries[hash] = null;
-		words--;
+			words--;
+		} else
+			System.out.println("\nword not found");
 	}
 
 	public String search(String key) {
 		int hash = convertHash(key);
-		if (entries[hash] != null)
-			return key + ": " + entries[hash].getValue();
-		return "key not found";
+		if (entries[hash] != null && entries[hash].getKey().equals(key))
+			return "\n" + key + ": " + entries[hash].getValue();
+		return "\nword not found";
 	}
 
 	public boolean edit(String key, String value) {
 		int hash = convertHash(key);
-		if (entries[hash] != null) {
+		if (entries[hash] != null && entries[hash].getKey().equals(key)) {
 			entries[hash].setValue("\n   -> " + value);
 			return true;
 		}
@@ -86,7 +88,7 @@ public class Dictionary {
 	public void fromCSV(String function, int wordCount, String fName) throws FileNotFoundException {
 		if (function.equals("add")) {
 			System.out.print("Adding " + wordCount + " entries from '" + fName + "' ... ");
-			Scanner csvIn = new Scanner(new File("D:/Desktop/dictionary/res/dictionary.csv"));
+			Scanner csvIn = new Scanner(new File("C:/Users/100584423/Desktop/Word-Dictionary-master/res/dictionary.csv"));
 			String[] kv;
 			for (int i=0; i<wordCount; i++) {
 				kv = csvIn.nextLine().split("\",\"");
@@ -95,7 +97,7 @@ public class Dictionary {
 			csvIn.close();
 		} else if (function.equals("edit")) {
 			System.out.print("Editing " + wordCount + " entries from '" + fName + "' ... ");
-			Scanner csvIn = new Scanner(new File("D:/Desktop/dictionary/res/definitions.csv"));
+			Scanner csvIn = new Scanner(new File("C:/Users/100584423/Desktop/Word-Dictionary-master/res/definitions.csv"));
 			String[] kv;
 			for (int i=0; i<wordCount; i++) {
 				kv = csvIn.nextLine().split("\",\"");
@@ -124,5 +126,9 @@ public class Dictionary {
 			hash = (hash + 1) % entries.length; // if collision occurs, add +1 to hash
 		}
 		return hash;
+	}
+	
+	public int getWords() {
+		return words;
 	}
 }
