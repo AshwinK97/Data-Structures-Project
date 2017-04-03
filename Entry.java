@@ -24,4 +24,8 @@ public class Entry {
 	public int getHash() {
 		return hash;
 	}
+	
+	public String toString() {
+		return key + ": " + value;
+	}
 }
