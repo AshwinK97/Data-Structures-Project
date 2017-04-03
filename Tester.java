@@ -3,52 +3,72 @@ import java.util.Scanner;
 
 public class Tester {
 
-	public void useDictionary(Dictionary book) {
+	public static void cli(Dictionary book) {
 		boolean isUsing = true;
 		Scanner in = new Scanner(System.in);
 		String key, value, command;
 
 		do {
-			command = in.nextLine();
-			if (command.toLowerCase().equals("exit")) {
+			System.out.print("\n_ ");
+			command = in.nextLine().toLowerCase().replaceAll(" ", ""); // clean the input
+			if (command.equals("exit")) {
 				isUsing = false;
-			} else if (command.toLowerCase().equals("search")) {
+			} else if (command.equals("clear")) {
+				clear(50);
+			} else if (command.equals("search")) {
 				System.out.print("Enter word to search: ");
-				book.search(in.nextLine());
-			} else if (command.toLowerCase().equals("add")) {
+				System.out.println(book.search(in.nextLine()));
+			} else if (command.equals("add")) {
 				System.out.print("Enter word: ");
 				key = in.nextLine();
-				System.out.println("Enter definition: ");
+				System.out.print("Enter definition: ");
 				value = in.nextLine();
 				book.add(key, value);
-			} else if (command.toLowerCase().equals("edit")) {
-				System.out.println("Enter word to edit: ");
+			} else if (command.equals("edit")) {
+				System.out.print("Enter word to edit: ");
 				key = in.nextLine();
-				System.out.println("Enter new definition: ");
+				System.out.print("Enter new definition: ");
 				value = in.nextLine();
 				book.edit(key, value);
-			} else if (command.toLowerCase().equals("delete")) {
-				
-			} else if (command.toLowerCase().equals("view")) {
-
+			} else if (command.equals("delete")) {
+				System.out.println("Enter word to delete: ");
+				book.delete(in.nextLine());
+			} else if (command.equals("view")) {
+				System.out.println(book.toString());
+			} else if (command.equals("size")) {
+				System.out.println("# of words: " + book.getWords());
+			} else {
+				System.out.println("error: command not found");
 			}
 		} while (isUsing);
 		in.close();
-		System.out.println("exiting now ...");
+		System.out.println("exiting");
+	}
+	
+	public static Dictionary runTests() throws FileNotFoundException {
+		Dictionary book;
+		book = new Dictionary(100);
+//		System.out.println(book.toString());
+		book = new Dictionary(1000);
+//		System.out.println(book.toString());
+		book = new Dictionary(2500);
+//		System.out.println(book.toString());
+		book = new Dictionary(5000);
+//		System.out.println(book.toString());
+		book = new Dictionary(10000);
+//		System.out.println(book.toString());
+//		book = new Dictionary("all");
+//		System.out.println(bookAll.toString());
+		return book;
+	}
+	
+	public static void clear(int n) { // clears the screen of 'n' lines
+		for (int i=0; i<n; i++)
+			System.out.println();
 	}
 
 	public static void main(String args[]) throws FileNotFoundException {
-//		Dictionary book100 = new Dictionary(100);
-//		System.out.println(book100.toString());
-		 Dictionary book1000 = new Dictionary(1000);
-		 System.out.println(book1000.toString());
-		// Dictionary book2500 = new Dictionary(2500);
-		// System.out.println(book2500.toString());
-		// Dictionary book5000 = new Dictionary(5000);
-		// System.out.println(book5000.toString());
-		// Dictionary book10000 = new Dictionary(100000);
-		// System.out.println(book10000.toString());
-		// Dictionary bookAll = new Dictionary("all");
-		// System.out.println(bookAll.toString());
+		Dictionary book = runTests(); // return dictionary with all entries in it
+		cli(book);
 	}
 }
