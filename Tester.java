@@ -34,7 +34,7 @@ public class Tester {
 			else if (command.equals("search")) { // search for word
 				if (book!=null) {
 					System.out.print("Enter word to search: ");
-					System.out.println(book.search(in.nextLine()));
+					System.out.println(book.search(in.nextLine(), true));
 				}
 				else
 					System.out.println("no book found");
@@ -64,14 +64,14 @@ public class Tester {
 			else if (command.equals("delete")) { // remove existing word
 				if (book!=null) {
 					System.out.print("Enter word to delete: ");
-					book.delete(in.nextLine());
+					book.delete(in.nextLine(), true);
 				}
 				else
 					System.out.println("no book found");
 			} 
 			else if (command.equals("view")) { // view raw dictionary
 				if (book!=null)
-					System.out.println(book.toString());
+					book.view();
 				else
 					System.out.println("no book found");
 			} 
@@ -130,5 +130,6 @@ public class Tester {
 
 	public static void main(String args[]) throws FileNotFoundException {
 		cli(); // run the command line interface
+		System.exit(0);
 	}
 }
