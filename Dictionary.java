@@ -9,19 +9,21 @@ public class Dictionary {
 	private int words;
 
 	public Dictionary(int wordCount) throws FileNotFoundException {
-		entries = new Entry[(int)(wordCount + 10*Math.log10(wordCount))]; // initialize entries array to entries + 10*log10(entries)
+		entries = new Entry[wordCount]; // initialize size of entries array
 		words = 0;
 		for (int i=0; i<entries.length; i++)
 			entries[i] = null; // initialize all entries to be null
-
-		fromCSV("add", wordCount, "dictionary.csv");
-		fromCSV("edit", wordCount, "definitions.csv");
-//		fromFile("search", wordCount, "words.txt");
-//		fromFile("delete", wordCount, "words.txt");
 	}
 
 	public Dictionary(String s) {
 		// TODO load all words from dictionary
+	}
+	
+	public void runTest(int wordCount) throws FileNotFoundException {
+		fromCSV("add", wordCount, "dictionary.csv");
+		fromCSV("edit", wordCount, "definitions.csv");
+//		fromFile("search", wordCount, "words.txt");
+//		fromFile("delete", wordCount, "words.txt");
 	}
 
 	public String toString() { // returns a string containing the whole dictionary
@@ -88,7 +90,7 @@ public class Dictionary {
 	public void fromCSV(String function, int wordCount, String fName) throws FileNotFoundException {
 		if (function.equals("add")) {
 			System.out.print("Adding " + wordCount + " entries from '" + fName + "' ... ");
-			Scanner csvIn = new Scanner(new File("C:/Users/100584423/Desktop/Word-Dictionary-master/res/dictionary.csv"));
+			Scanner csvIn = new Scanner(new File("D:/Desktop/dictionary/res/dictionary.csv"));
 			String[] kv;
 			for (int i=0; i<wordCount; i++) {
 				kv = csvIn.nextLine().split("\",\"");
@@ -97,7 +99,7 @@ public class Dictionary {
 			csvIn.close();
 		} else if (function.equals("edit")) {
 			System.out.print("Editing " + wordCount + " entries from '" + fName + "' ... ");
-			Scanner csvIn = new Scanner(new File("C:/Users/100584423/Desktop/Word-Dictionary-master/res/definitions.csv"));
+			Scanner csvIn = new Scanner(new File("D:/Desktop/dictionary/res/definitions.csv"));
 			String[] kv;
 			for (int i=0; i<wordCount; i++) {
 				kv = csvIn.nextLine().split("\",\"");
