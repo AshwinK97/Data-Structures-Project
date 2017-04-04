@@ -25,48 +25,58 @@ public class Dictionary {
 	public void runTests(int wordCount) throws FileNotFoundException {
 		fromCSV("add", wordCount, "dictionary.csv");
 		fromCSV("edit", wordCount, "definitions.csv");
-//		fromFile("search", wordCount, "words.txt");
-//		fromFile("delete", wordCount, "words.txt");
+		fromFile("search", wordCount, "words.txt");
+		fromFile("delete", wordCount, "words.txt");
 	}
 
-	public String toString() { // returns a string containing the whole dictionary
-		String s = "\n# of words: " + words + "\n---------------------";
+	public void view() { // returns a string containing the whole dictionary
+		System.out.print("\n# of words: " + words + "\n---------------------");
 		for (int i=0; i<entries.length; i++) {
 			if (entries[i] == null)
-				s += "\n" + i + ". " + "null";
+				System.out.print("\n" + i + ". " + "null");
 			else
-				s += "\n" + i + ". " + entries[i].toString();
+				System.out.print("\n" + i + ". " + entries[i].toString());
 		}
-		return s;
 	}
 
-	public void add(String key, String value) {
+	public boolean add(String key, String value) {
 		int hash = convertHash(key);
 		if (entries[hash]!=null && entries[hash].getKey().equals(key)) { // if key already exists
 			entries[hash].setValue(entries[hash].getValue() + "\n   -> " + value); // add value to that key
+			return true;
 		}
 		else {
 			if (words > entries.length) // in case there is no room for more words
 				resizeEntries(); // add 100 places to the array
 			entries[hash] = new Entry(key, "\n   -> " + value, hash); // if key doesn't exist, create new entry
 			words++;
+			return true;
 		}
 	}
 
-	public void delete(String key) {
+	public boolean delete(String key, boolean view) {
 		int hash = convertHash(key);
 		if (entries[hash]!=null && entries[hash].getKey().equals(key)) { // if key exists, make that entry null
 			entries[hash] = null;
 			words--;
-		} else
+			return true;
+		}
+		if (view)
 			System.out.println("\nword not found");
+		return false;
+			
 	}
 
-	public String search(String key) {
+	public boolean search(String key, boolean view) {
 		int hash = convertHash(key);
-		if (entries[hash] != null && entries[hash].getKey().equals(key))
-			return "\n" + key + ": " + entries[hash].getValue();
-		return "\nword not found";
+		if (entries[hash] != null && entries[hash].getKey().equals(key)) {
+			if (view)
+				System.out.println("\n" + key + ": " + entries[hash].getValue());
+			return true;
+		}
+		if (view)
+			System.out.println("\nword not found");
+		return false;
 	}
 
 	public boolean edit(String key, String value) {
@@ -79,56 +89,95 @@ public class Dictionary {
 	}
 
 	public void fromFile(String function, int wordCount, String fName) throws FileNotFoundException {
+		int success = 0;
 		if (function.equals("search")) {
-			System.out.print("Searching " + wordCount + " entries from '" + fName + "' ... ");
-			// TODO add words from file
+			Scanner fileIn = new Scanner(new File("C:/Users/100584423/Desktop/res/" + fName));
+			if (wordCount==-1) {
+				System.out.print("Searching all entries from '" + fName + "'     ... ");
+				while (fileIn.hasNextLine()) {
+					if (search(fileIn.nextLine(), false))
+						success++;
+				}
+			} else {
+				System.out.print("Searching " + wordCount + " entries from '" + fName + "'     ... ");
+				for (int i=0; i<wordCount; i++) {
+					if (search(fileIn.nextLine(), false))
+						success++;
+				}
+			}
+			fileIn.close();
+			System.out.print("done");
+			System.out.println("\n -> Successful searches: " + success + " runtime: ");
 		} else if (function.equals("delete")) {
-			System.out.print("Deleting " + wordCount + " entries from '" + fName + "' ... ");
-			// TODO delete words from file
+			Scanner fileIn = new Scanner(new File("C:/Users/100584423/Desktop/res/" + fName));
+			if (wordCount==-1) {
+				System.out.print("Deleting all entries from '" + fName + "'      ... ");
+				while (fileIn.hasNextLine()) {
+					if (delete(fileIn.nextLine(), false))
+						success++;
+				}
+			} else {
+				System.out.print("Deleting " + wordCount + " entries from '" + fName + "'      ... ");
+				for (int i=0; i<wordCount; i++) {
+					if (delete(fileIn.nextLine(), false))
+						success++;
+				}
+			}
+			fileIn.close();
+			System.out.print("done");
+			System.out.println("\n -> Successful deletions: " + success + " runtime: ");
 		} else {
 			System.out.println("invalid fromFile operation");
 		}
 	}
 
 	public void fromCSV(String function, int wordCount, String fName) throws FileNotFoundException {
+		int success = 0;
 		if (function.equals("add")) {
-			Scanner csvIn = new Scanner(new File("D:/Desktop/dictionary/res/dictionary.csv"));
+			Scanner csvIn = new Scanner(new File("C:/Users/100584423/Desktop/res/" + fName));
 			String[] kv;
 			if (wordCount==-1) {
-				System.out.print("Adding all entries from '" + fName + "' ... ");
+				System.out.print("Adding all entries from '" + fName + "'   ... ");
 				while (csvIn.hasNextLine()) {
 					kv = csvIn.nextLine().split("\",\"");
-					add(kv[0].replaceAll("\"", ""), kv[1].replaceAll("\"", "")); // remove quotes from strings before adding
+					if (add(kv[0].replaceAll("\"", ""), kv[1].replaceAll("\"", "")))
+						success++;
 				}
 			} else {
-				System.out.print("Adding " + wordCount + " entries from '" + fName + "' ... ");
+				System.out.print("Adding " + wordCount + " entries from '" + fName + "'   ... ");
 				for (int i=0; i<wordCount; i++) {
 					kv = csvIn.nextLine().split("\",\"");
-					add(kv[0].replaceAll("\"", ""), kv[1].replaceAll("\"", "")); // remove quotes from strings before adding
+					if (add(kv[0].replaceAll("\"", ""), kv[1].replaceAll("\"", "")))
+						success++;
 				}
 			}
 			csvIn.close();
+			System.out.print("done");
+			System.out.println("\n -> Successful additions: " + success + " runtime: ");
 		} else if (function.equals("edit")) {
-			Scanner csvIn = new Scanner(new File("D:/Desktop/dictionary/res/definitions.csv"));
+			Scanner csvIn = new Scanner(new File("C:/Users/100584423/Desktop/res/" + fName));
 			String[] kv;
 			if (wordCount==-1) {
 				System.out.print("Editing all entries from '" + fName + "' ... ");
 				while (csvIn.hasNextLine()) {
 					kv = csvIn.nextLine().split("\",\"");
-					edit(kv[0].replaceAll("\"", ""), kv[1].replaceAll("\"", "")); // remove quotes from strings before adding
+					if (edit(kv[0].replaceAll("\"", ""), kv[1].replaceAll("\"", "")))
+						success++;
 				}
 			} else {
 				System.out.print("Editing " + wordCount + " entries from '" + fName + "' ... ");
 				for (int i=0; i<wordCount; i++) {
 					kv = csvIn.nextLine().split("\",\"");
-					edit(kv[0].replaceAll("\"", ""), kv[1].replaceAll("\"", "")); // remove quotes from strings before adding
+					if (edit(kv[0].replaceAll("\"", ""), kv[1].replaceAll("\"", "")))
+						success++;
 				}
 			}
 			csvIn.close();
+			System.out.print("done");
+			System.out.println("\n -> Successful edits: " + success + " runtime: ");
 		} else {
 			System.out.println("invalid fromCSV operation");
 		}
-		System.out.println("done");
 	}
 
 	public void resizeEntries() { // add 100 indexes to array
