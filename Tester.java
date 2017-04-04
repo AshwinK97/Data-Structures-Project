@@ -92,13 +92,13 @@ public class Tester {
 	public static void runTests(String s) throws FileNotFoundException {
 		if (s.toLowerCase().replaceAll(" ", "").equals("all")) {
 			book = new Dictionary("all");
-//			book.runTest(all);               ///////////////////////// get this to work
+			book.runTests(-1);               ///////////////////////// get this to work
 		}
 		else {
 			int i = Integer.valueOf(s);
 			if (i > 0) {
 				book = new Dictionary(i);
-				book.runTest(i);
+				book.runTests(i);
 			}
 			else
 				System.out.println("book size error");
@@ -116,7 +116,7 @@ public class Tester {
 		System.out.println("| edit   | prompts user to enter a word and definition, if that word exists in the dictionary, replace its definition.                             |");
 		System.out.println("| search | prompts user to enter a word, if that word exists in the dictionary, show a list of its definitions.                                    |");
 		System.out.println("| size   | shows the number of words in the dictionary.                                                                                            |");
-		System.out.println("| view   | shows the whole dictionary, nulls included.                                                                                             |");
+		System.out.println("| view   | shows the whole dictionary, nulls included. *Very slow for large dictionary sizes.                                                      |");
 		System.out.println("| help   | shows this help screen.                                                                                                                 |");
 		System.out.println("| clear  | clears the command line interface.                                                                                                      |");
 		System.out.println("| exit   | terminates the command line interface.                                                                                                  |");

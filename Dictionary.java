@@ -16,10 +16,13 @@ public class Dictionary {
 	}
 
 	public Dictionary(String s) {
-		// TODO load all words from dictionary
+		entries = new Entry[120000]; // initialize size of entries array
+		words = 0;
+		for (int i=0; i<entries.length; i++)
+			entries[i] = null; // initialize all entries to be null
 	}
 	
-	public void runTest(int wordCount) throws FileNotFoundException {
+	public void runTests(int wordCount) throws FileNotFoundException {
 		fromCSV("add", wordCount, "dictionary.csv");
 		fromCSV("edit", wordCount, "definitions.csv");
 //		fromFile("search", wordCount, "words.txt");
@@ -89,21 +92,37 @@ public class Dictionary {
 
 	public void fromCSV(String function, int wordCount, String fName) throws FileNotFoundException {
 		if (function.equals("add")) {
-			System.out.print("Adding " + wordCount + " entries from '" + fName + "' ... ");
 			Scanner csvIn = new Scanner(new File("D:/Desktop/dictionary/res/dictionary.csv"));
 			String[] kv;
-			for (int i=0; i<wordCount; i++) {
-				kv = csvIn.nextLine().split("\",\"");
-				add(kv[0].replaceAll("\"", ""), kv[1].replaceAll("\"", "")); // remove quotes from strings before adding
+			if (wordCount==-1) {
+				System.out.print("Adding all entries from '" + fName + "' ... ");
+				while (csvIn.hasNextLine()) {
+					kv = csvIn.nextLine().split("\",\"");
+					add(kv[0].replaceAll("\"", ""), kv[1].replaceAll("\"", "")); // remove quotes from strings before adding
+				}
+			} else {
+				System.out.print("Adding " + wordCount + " entries from '" + fName + "' ... ");
+				for (int i=0; i<wordCount; i++) {
+					kv = csvIn.nextLine().split("\",\"");
+					add(kv[0].replaceAll("\"", ""), kv[1].replaceAll("\"", "")); // remove quotes from strings before adding
+				}
 			}
 			csvIn.close();
 		} else if (function.equals("edit")) {
-			System.out.print("Editing " + wordCount + " entries from '" + fName + "' ... ");
 			Scanner csvIn = new Scanner(new File("D:/Desktop/dictionary/res/definitions.csv"));
 			String[] kv;
-			for (int i=0; i<wordCount; i++) {
-				kv = csvIn.nextLine().split("\",\"");
-				edit(kv[0].replaceAll("\"", ""), kv[1].replaceAll("\"", "")); // remove quotes from strings before adding
+			if (wordCount==-1) {
+				System.out.print("Editing all entries from '" + fName + "' ... ");
+				while (csvIn.hasNextLine()) {
+					kv = csvIn.nextLine().split("\",\"");
+					edit(kv[0].replaceAll("\"", ""), kv[1].replaceAll("\"", "")); // remove quotes from strings before adding
+				}
+			} else {
+				System.out.print("Editing " + wordCount + " entries from '" + fName + "' ... ");
+				for (int i=0; i<wordCount; i++) {
+					kv = csvIn.nextLine().split("\",\"");
+					edit(kv[0].replaceAll("\"", ""), kv[1].replaceAll("\"", "")); // remove quotes from strings before adding
+				}
 			}
 			csvIn.close();
 		} else {
