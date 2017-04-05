@@ -14,7 +14,7 @@ public class Tester {
 		do {
 			System.out.print("\n>>> "); // print cursor
 			command = in.nextLine().toLowerCase().replaceAll(" ", ""); // clean the input
-			if (command.equals("exit")) { // exit the cli
+			if (command.equals("exit")) { // exit the CLI
 				isUsing = false;
 			} 
 			else if (command.equals("clear")) { // clear the screen
@@ -34,7 +34,7 @@ public class Tester {
 			else if (command.equals("search")) { // search for word
 				if (book!=null) {
 					System.out.print("Enter word to search: ");
-					System.out.println(book.search(in.nextLine(), true));
+					book.search(in.nextLine(), true);
 				}
 				else
 					System.out.println("no book found");
@@ -92,7 +92,7 @@ public class Tester {
 	public static void runTests(String s) throws FileNotFoundException {
 		if (s.toLowerCase().replaceAll(" ", "").equals("all")) {
 			book = new Dictionary("all");
-			book.runTests(-1);               ///////////////////////// get this to work
+			book.runTests(-1);
 		}
 		else {
 			int i = Integer.valueOf(s);
@@ -116,7 +116,7 @@ public class Tester {
 		System.out.println("| edit   | prompts user to enter a word and definition, if that word exists in the dictionary, replace its definition.                             |");
 		System.out.println("| search | prompts user to enter a word, if that word exists in the dictionary, show a list of its definitions.                                    |");
 		System.out.println("| size   | shows the number of words in the dictionary.                                                                                            |");
-		System.out.println("| view   | shows the whole dictionary, nulls included. *Very slow for large dictionary sizes.                                                      |");
+		System.out.println("| view   | shows the whole dictionary, nulls included.                                                                                             |");
 		System.out.println("| help   | shows this help screen.                                                                                                                 |");
 		System.out.println("| clear  | clears the command line interface.                                                                                                      |");
 		System.out.println("| exit   | terminates the command line interface.                                                                                                  |");
